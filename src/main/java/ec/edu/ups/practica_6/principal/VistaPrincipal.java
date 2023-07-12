@@ -83,7 +83,7 @@ public class VistaPrincipal extends javax.swing.JFrame {
         btnListarDirectoriosOcultos = new javax.swing.JButton();
         btnListarArchivosOcultos = new javax.swing.JButton();
         btnListarTodo = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
+        bttnSeleccionarRuta = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         menuGestionar = new javax.swing.JMenu();
         menuItemCrear = new javax.swing.JMenuItem();
@@ -96,6 +96,9 @@ public class VistaPrincipal extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        jPanel1.setBackground(new java.awt.Color(153, 153, 153));
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "GESTIONAR DIRECTORIO", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 0, 24))); // NOI18N
+
         jTree.setFont(new java.awt.Font("Arial", 0, 13)); // NOI18N
         jScrollPane1.setViewportView(jTree);
 
@@ -106,7 +109,7 @@ public class VistaPrincipal extends javax.swing.JFrame {
         jScrollPane2.setViewportView(jAreaInformacion);
 
         txtRuta.setFont(new java.awt.Font("Arial", 0, 13)); // NOI18N
-        txtRuta.setText("Ruta:");
+        txtRuta.setToolTipText("RUTA:");
         txtRuta.setBorder(null);
 
         btnMostrarInformacion.setText("Mostrar Informacion");
@@ -162,12 +165,12 @@ public class VistaPrincipal extends javax.swing.JFrame {
             }
         });
 
-        jButton5.setFont(new java.awt.Font("Arial", 0, 13)); // NOI18N
-        jButton5.setText("Seleecionar Ruta");
-        jButton5.setBorder(null);
-        jButton5.addActionListener(new java.awt.event.ActionListener() {
+        bttnSeleccionarRuta.setFont(new java.awt.Font("Arial", 0, 13)); // NOI18N
+        bttnSeleccionarRuta.setText("Seleecionar Ruta");
+        bttnSeleccionarRuta.setBorder(null);
+        bttnSeleccionarRuta.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton5ActionPerformed(evt);
+                bttnSeleccionarRutaActionPerformed(evt);
             }
         });
 
@@ -194,11 +197,11 @@ public class VistaPrincipal extends javax.swing.JFrame {
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(txtRuta, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(28, 28, 28)
-                                .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addComponent(bttnSeleccionarRuta, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(351, 351, 351)
                         .addComponent(btnMostrarInformacion, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(31, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -206,7 +209,7 @@ public class VistaPrincipal extends javax.swing.JFrame {
                 .addGap(16, 16, 16)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtRuta, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(bttnSeleccionarRuta, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(29, 29, 29)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
@@ -325,7 +328,7 @@ public class VistaPrincipal extends javax.swing.JFrame {
         activoCrear = false;
     }//GEN-LAST:event_menuItemCrearActionPerformed
 
-    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+    private void bttnSeleccionarRutaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bttnSeleccionarRutaActionPerformed
         int seleccion = 0;
         fileseleccionarCarpeta.showOpenDialog(null);
         if (seleccion == fileseleccionarCarpeta.APPROVE_OPTION) {
@@ -334,10 +337,9 @@ public class VistaPrincipal extends javax.swing.JFrame {
         } else {
             txtRuta.setText("No has seleccionado ninguna ruta");
         }
-    }//GEN-LAST:event_jButton5ActionPerformed
+    }//GEN-LAST:event_bttnSeleccionarRutaActionPerformed
 
     private void menuItemEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemEliminarActionPerformed
-
         DefaultMutableTreeNode nodoSeleccionado = (DefaultMutableTreeNode) jTree.getSelectionPath().getLastPathComponent();
         String rutaCompleta = obtenerRutaCompletaDesdeNodo(nodoSeleccionado);
 
@@ -404,7 +406,6 @@ public class VistaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnListarTodoActionPerformed
 
     private void menuItemRenombrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemRenombrarActionPerformed
-
         DefaultMutableTreeNode nodoSeleccionado = (DefaultMutableTreeNode) jTree.getSelectionPath().getLastPathComponent();
         if (nodoSeleccionado != null) {
             String nombreAnterior = nodoSeleccionado.toString();
@@ -417,8 +418,9 @@ public class VistaPrincipal extends javax.swing.JFrame {
                 if (nuevoNombre != null && !nuevoNombre.isEmpty()) {
                     directoriosController.renombrarArchivoODirectorio(nombreAnterior, nuevoNombre);
 
+                    // Actualizar el nombre del nodo en el árbol
                     nodoSeleccionado.setUserObject(nuevoNombre);
-                    modelo = (DefaultTreeModel) jTree.getModel();
+                    DefaultTreeModel modelo = (DefaultTreeModel) jTree.getModel();
                     modelo.nodeChanged(nodoSeleccionado);
                 } else {
                     JOptionPane.showMessageDialog(null, "No se ingresó un nombre válido.");
@@ -478,7 +480,6 @@ public class VistaPrincipal extends javax.swing.JFrame {
                 }
             }
         } else {
-            //
         }
     }
 
@@ -560,9 +561,9 @@ public class VistaPrincipal extends javax.swing.JFrame {
     private javax.swing.JButton btnListarDirectoriosOcultos;
     private javax.swing.JButton btnListarTodo;
     private javax.swing.JButton btnMostrarInformacion;
+    private javax.swing.JButton bttnSeleccionarRuta;
     private javax.swing.JFileChooser fileseleccionarCarpeta;
     private javax.swing.JTextArea jAreaInformacion;
-    private javax.swing.JButton jButton5;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;

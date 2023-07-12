@@ -8,13 +8,12 @@ import java.io.File;
 import java.io.IOException;
 import javax.swing.tree.DefaultMutableTreeNode;
 
-
 /**
  *
  * @author jeanp
  */
 public class DirectoriosController {
-    
+
     public void crearDirectorio(String ruta, String nombreDirectorio) {
         String rutaCompleta = ruta + "/" + nombreDirectorio;
 
@@ -55,7 +54,7 @@ public class DirectoriosController {
         }
     }
 
-   public void listarDirectorios(File directorio, DefaultMutableTreeNode nodoPadre) {
+    public void listarDirectorios(File directorio, DefaultMutableTreeNode nodoPadre) {
         if (directorio.isDirectory()) {
             File[] archivos = directorio.listFiles();
             if (archivos != null) {
@@ -70,8 +69,7 @@ public class DirectoriosController {
         }
     }
 
-   
-   public void listarArchivos(File directorio, DefaultMutableTreeNode nodoPadre) {
+    public void listarArchivos(File directorio, DefaultMutableTreeNode nodoPadre) {
         if (directorio.isDirectory()) {
             File[] archivos = directorio.listFiles();
             if (archivos != null) {
@@ -84,6 +82,7 @@ public class DirectoriosController {
             }
         }
     }
+
     public void listarDirectoriosOcultos(File directorio, DefaultMutableTreeNode nodoPadre) {
         if (directorio.isDirectory()) {
             File[] archivos = directorio.listFiles();
@@ -98,7 +97,7 @@ public class DirectoriosController {
             }
         }
     }
-    
+
     public void listarArchivosOcultos(File directorio, DefaultMutableTreeNode nodoPadre) {
         if (directorio.isDirectory()) {
             File[] archivos = directorio.listFiles();
@@ -112,7 +111,7 @@ public class DirectoriosController {
             }
         }
     }
-    
+
     public void listarTodo(File directorio, DefaultMutableTreeNode nodoPadre) {
         if (directorio.isDirectory()) {
             File[] archivos = directorio.listFiles();
@@ -130,7 +129,7 @@ public class DirectoriosController {
             }
         }
     }
-    
+
     public void eliminarArchivoODirectorio(String rutaArchivoODirectorio) {
         File archivoODirectorio = new File(rutaArchivoODirectorio);
 
@@ -148,7 +147,7 @@ public class DirectoriosController {
             System.out.println("El archivo o directorio no existe: " + rutaArchivoODirectorio);
         }
     }
-    
+
     private void eliminarDirectorio(File directorio) {
         File[] archivos = directorio.listFiles();
 
@@ -162,10 +161,13 @@ public class DirectoriosController {
             }
         }
 
-        directorio.delete();
-        System.out.println("Directorio eliminado: " + directorio.getAbsolutePath());
+        if (directorio.delete()) {
+            System.out.println("Directorio eliminado: " + directorio.getAbsolutePath());
+        } else {
+            System.out.println("No se pudo eliminar el directorio: " + directorio.getAbsolutePath());
+        }
     }
-    
+
     public void renombrarArchivoODirectorio(String ruta, String nuevoNombre) {
         File archivoODirectorio = new File(ruta);
         String nuevaRuta = archivoODirectorio.getParent() + File.separator + nuevoNombre;
