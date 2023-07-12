@@ -10,8 +10,10 @@ import java.io.File;
 import java.util.Date;
 import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
+import javax.swing.SwingUtilities;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreePath;
 
 /**
  *
@@ -188,12 +190,12 @@ public class VistaPrincipal extends javax.swing.JFrame {
                                 .addGap(49, 49, 49)
                                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(28, 28, 28)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(btnListarDirectoriosOcultos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(btnListarTodo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(btnListarArchivosOcultos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(btnListarArchivos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(btnListarDirectorios, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                    .addComponent(btnListarDirectorios, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(btnListarTodo, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(btnListarArchivosOcultos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(btnListarDirectoriosOcultos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(txtRuta, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(28, 28, 28)
@@ -201,7 +203,7 @@ public class VistaPrincipal extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(351, 351, 351)
                         .addComponent(btnMostrarInformacion, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(31, Short.MAX_VALUE))
+                .addGap(15, 15, 15))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -343,23 +345,25 @@ public class VistaPrincipal extends javax.swing.JFrame {
         DefaultMutableTreeNode nodoSeleccionado = (DefaultMutableTreeNode) jTree.getSelectionPath().getLastPathComponent();
         String rutaCompleta = obtenerRutaCompletaDesdeNodo(nodoSeleccionado);
 
+        int confirmacion;
         if (nodoSeleccionado.getAllowsChildren()) {
-            int confirmacion = JOptionPane.showConfirmDialog(this, "¿Estás seguro de eliminar el directorio y su contenido?", "Confirmar Eliminación", JOptionPane.YES_NO_OPTION);
-
-            if (confirmacion == JOptionPane.YES_OPTION) {
-                directoriosController.eliminarArchivoODirectorio(rutaCompleta);
-                DefaultMutableTreeNode nodoPadre = (DefaultMutableTreeNode) nodoSeleccionado.getParent();
-                actualizarJTree(nodoPadre);
-                JOptionPane.showMessageDialog(this, "Directorio eliminado: " + rutaCompleta);
-            }
+            confirmacion = JOptionPane.showConfirmDialog(this, "¿Estás seguro de eliminar el directorio y su contenido?", "Confirmar Eliminación", JOptionPane.YES_NO_OPTION);
         } else {
-            int confirmacion = JOptionPane.showConfirmDialog(this, "¿Estás seguro de eliminar el archivo?", "Confirmar Eliminación", JOptionPane.YES_NO_OPTION);
+            confirmacion = JOptionPane.showConfirmDialog(this, "¿Estás seguro de eliminar el archivo?", "Confirmar Eliminación", JOptionPane.YES_NO_OPTION);
+        }
 
-            if (confirmacion == JOptionPane.YES_OPTION) {
-                directoriosController.eliminarArchivoODirectorio(rutaCompleta);
+        if (confirmacion == JOptionPane.YES_OPTION) {
+            boolean eliminado = directoriosController.eliminarArchivoODirectorio(rutaCompleta);
+            if (eliminado) {
                 DefaultMutableTreeNode nodoPadre = (DefaultMutableTreeNode) nodoSeleccionado.getParent();
                 actualizarJTree(nodoPadre);
-                JOptionPane.showMessageDialog(this, "Archivo eliminado: " + rutaCompleta);
+                if (nodoSeleccionado.getAllowsChildren()) {
+                    JOptionPane.showMessageDialog(this, "Directorio eliminado: " + rutaCompleta);
+                } else {
+                    JOptionPane.showMessageDialog(this, "Archivo eliminado: " + rutaCompleta);
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, "No se pudo eliminar el archivo o directorio: " + rutaCompleta);
             }
         }
         activoEliminar = false;
@@ -431,26 +435,32 @@ public class VistaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_menuItemRenombrarActionPerformed
 
     private void btnMostrarInformacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMostrarInformacionActionPerformed
-        DefaultMutableTreeNode nodoSeleccionado = (DefaultMutableTreeNode) jTree.getSelectionPath().getLastPathComponent();
+         TreePath selectionPath = jTree.getSelectionPath();
 
-        if (nodoSeleccionado != null) {
-            String ruta = obtenerRutaCompletaDesdeNodo(nodoSeleccionado);
-            File archivo = new File(ruta);
+    if (selectionPath != null) {
+        DefaultMutableTreeNode nodoSeleccionado = (DefaultMutableTreeNode) selectionPath.getLastPathComponent();
+        String ruta = obtenerRutaCompletaDesdeNodo(nodoSeleccionado);
+        File archivo = new File(ruta);
 
-            if (archivo.exists()) {
-                StringBuilder informacion = new StringBuilder();
+        if (archivo.exists()) {
+            StringBuilder informacion = new StringBuilder();
 
-                informacion.append("Información:\n");
-                informacion.append("Path absoluto: ").append(archivo.getAbsolutePath()).append("\n");
-                informacion.append("Tamaño del archivo: ").append(convertirTamaño(archivo.length())).append("\n");
-                informacion.append("Permisos de lectura: ").append(archivo.canRead()).append("\n");
-                informacion.append("Permisos de escritura: ").append(archivo.canWrite()).append("\n");
-                informacion.append("Fecha de última modificación: ").append(new Date(archivo.lastModified())).append("\n");
+            informacion.append("Información:\n");
+            informacion.append("Path absoluto: ").append(archivo.getAbsolutePath()).append("\n");
+            informacion.append("Tamaño del archivo: ").append(convertirTamaño(archivo.length())).append("\n");
+            informacion.append("Permisos de lectura: ").append(archivo.canRead()).append("\n");
+            informacion.append("Permisos de escritura: ").append(archivo.canWrite()).append("\n");
+            informacion.append("Fecha de última modificación: ").append(new Date(archivo.lastModified())).append("\n");
+
+            SwingUtilities.invokeLater(() -> {
                 jAreaInformacion.setText(informacion.toString());
-            } else {
+            });
+        } else {
+            SwingUtilities.invokeLater(() -> {
                 jAreaInformacion.setText("El archivo o directorio no existe.");
-            }
+            });
         }
+    }
     }//GEN-LAST:event_btnMostrarInformacionActionPerformed
 
     private void menuItemSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemSalirActionPerformed

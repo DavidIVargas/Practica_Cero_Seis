@@ -130,25 +130,28 @@ public class DirectoriosController {
         }
     }
 
-    public void eliminarArchivoODirectorio(String rutaArchivoODirectorio) {
+    public boolean eliminarArchivoODirectorio(String rutaArchivoODirectorio) {
         File archivoODirectorio = new File(rutaArchivoODirectorio);
 
         if (archivoODirectorio.exists()) {
             if (archivoODirectorio.isDirectory()) {
-                eliminarDirectorio(archivoODirectorio);
+                return eliminarDirectorio(archivoODirectorio);
             } else {
                 if (archivoODirectorio.delete()) {
                     System.out.println("Archivo eliminado: " + rutaArchivoODirectorio);
+                    return true;
                 } else {
                     System.out.println("No se pudo eliminar el archivo: " + rutaArchivoODirectorio);
+                    return false;
                 }
             }
         } else {
             System.out.println("El archivo o directorio no existe: " + rutaArchivoODirectorio);
+            return false;
         }
     }
 
-    private void eliminarDirectorio(File directorio) {
+    private boolean eliminarDirectorio(File directorio) {
         File[] archivos = directorio.listFiles();
 
         if (archivos != null) {
@@ -163,8 +166,10 @@ public class DirectoriosController {
 
         if (directorio.delete()) {
             System.out.println("Directorio eliminado: " + directorio.getAbsolutePath());
+            return true;
         } else {
             System.out.println("No se pudo eliminar el directorio: " + directorio.getAbsolutePath());
+            return false;
         }
     }
 

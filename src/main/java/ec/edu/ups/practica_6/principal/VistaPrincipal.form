@@ -121,12 +121,12 @@
                                   <EmptySpace min="-2" pref="49" max="-2" attributes="0"/>
                                   <Component id="jScrollPane2" min="-2" pref="257" max="-2" attributes="0"/>
                                   <EmptySpace min="-2" pref="28" max="-2" attributes="0"/>
-                                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                      <Component id="btnListarDirectoriosOcultos" max="32767" attributes="0"/>
-                                      <Component id="btnListarTodo" alignment="0" max="32767" attributes="0"/>
-                                      <Component id="btnListarArchivosOcultos" alignment="0" max="32767" attributes="0"/>
+                                  <Group type="103" groupAlignment="0" attributes="0">
                                       <Component id="btnListarArchivos" alignment="0" max="32767" attributes="0"/>
                                       <Component id="btnListarDirectorios" alignment="0" max="32767" attributes="0"/>
+                                      <Component id="btnListarTodo" min="-2" pref="163" max="-2" attributes="0"/>
+                                      <Component id="btnListarArchivosOcultos" alignment="0" max="32767" attributes="0"/>
+                                      <Component id="btnListarDirectoriosOcultos" alignment="0" max="32767" attributes="0"/>
                                   </Group>
                               </Group>
                               <Group type="102" attributes="0">
@@ -141,7 +141,7 @@
                           <Component id="btnMostrarInformacion" min="-2" pref="158" max="-2" attributes="0"/>
                       </Group>
                   </Group>
-                  <EmptySpace pref="31" max="32767" attributes="0"/>
+                  <EmptySpace min="-2" pref="15" max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
