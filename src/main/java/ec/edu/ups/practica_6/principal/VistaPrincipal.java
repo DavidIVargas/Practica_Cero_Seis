@@ -435,32 +435,28 @@ public class VistaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_menuItemRenombrarActionPerformed
 
     private void btnMostrarInformacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMostrarInformacionActionPerformed
-         TreePath selectionPath = jTree.getSelectionPath();
+        TreePath selectionPath = jTree.getSelectionPath();
 
-    if (selectionPath != null) {
-        DefaultMutableTreeNode nodoSeleccionado = (DefaultMutableTreeNode) selectionPath.getLastPathComponent();
-        String ruta = obtenerRutaCompletaDesdeNodo(nodoSeleccionado);
-        File archivo = new File(ruta);
+        if (selectionPath != null) {
+            DefaultMutableTreeNode nodoSeleccionado = (DefaultMutableTreeNode) selectionPath.getLastPathComponent();
+            String ruta = obtenerRutaCompletaDesdeNodo(nodoSeleccionado);
+            File archivo = new File(ruta);
 
-        if (archivo.exists()) {
-            StringBuilder informacion = new StringBuilder();
+            if (archivo.exists()) {
+                StringBuilder informacion = new StringBuilder();
 
-            informacion.append("Información:\n");
-            informacion.append("Path absoluto: ").append(archivo.getAbsolutePath()).append("\n");
-            informacion.append("Tamaño del archivo: ").append(convertirTamaño(archivo.length())).append("\n");
-            informacion.append("Permisos de lectura: ").append(archivo.canRead()).append("\n");
-            informacion.append("Permisos de escritura: ").append(archivo.canWrite()).append("\n");
-            informacion.append("Fecha de última modificación: ").append(new Date(archivo.lastModified())).append("\n");
+                informacion.append("Información:\n");
+                informacion.append("Path absoluto: ").append(archivo.getAbsolutePath()).append("\n");
+                informacion.append("Tamaño del archivo: ").append(archivo.length()).append(" bytes\n");
+                informacion.append("Permisos de lectura: ").append(archivo.canRead()).append("\n");
+                informacion.append("Permisos de escritura: ").append(archivo.canWrite()).append("\n");
+                informacion.append("Fecha de última modificación: ").append(new Date(archivo.lastModified())).append("\n");
 
-            SwingUtilities.invokeLater(() -> {
                 jAreaInformacion.setText(informacion.toString());
-            });
-        } else {
-            SwingUtilities.invokeLater(() -> {
+            } else {
                 jAreaInformacion.setText("El archivo o directorio no existe.");
-            });
+            }
         }
-    }
     }//GEN-LAST:event_btnMostrarInformacionActionPerformed
 
     private void menuItemSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemSalirActionPerformed
